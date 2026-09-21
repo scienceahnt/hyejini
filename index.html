@@ -340,6 +340,12 @@ body.big .setbtn,body.big .setsum{display:none}
 .gbanner .groups button:active{transform:scale(.94)}
 .gbanner .groups button.on{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700;box-shadow:inset 0 3px 7px rgba(0,0,0,.3);transform:translateY(1px)}
 .gbanner .groups button.saving{opacity:.75}
+.gbanner .groups button small{display:block;font-size:11px;font-weight:400;opacity:.8;line-height:1.2}
+.gbanner .groups button{line-height:1.3;min-width:72px}
+.gnrow{display:flex;align-items:center;gap:8px}
+.gnrow span{width:64px;font-size:14px;flex-shrink:0;font-weight:500}
+.gnrow input{flex:1;border:1px solid var(--line);border-radius:12px;padding:8px 12px;outline:0;font-size:14px}
+.gnrow input:focus{border-color:var(--blue)}
 .gbanner .groups button[disabled]:not(.on){opacity:.5}
 .gbanner.picked{background:linear-gradient(90deg,#e6f4ea,#eef1ff)}
 .gm-cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;overflow-y:auto;padding-bottom:4px}
@@ -605,6 +611,14 @@ body.big .pgrid .rcard .q{font-size:20px}
     <div class="gm-cols" id="gmCols"></div>
   </div>
 </div>
+<div class="modal hide" id="gnModal">
+  <div class="box">
+    <div class="full-head"><div><b style="font-size:18px;font-weight:500">모둠 이름 정하기</b><small style="display:block;color:var(--sub);font-size:13px">비워 두면 "1모둠"처럼 번호만 보여요.</small></div>
+      <button class="icon-btn" id="gnClose" aria-label="닫기"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="cvlinks" id="gnList"></div>
+    <button class="btn primary" id="gnSave" style="width:100%;margin-top:14px">저장하고 학생들에게 알리기</button>
+  </div>
+</div>
 <div class="modal hide" id="cvModal">
   <div class="box">
     <div class="full-head"><div><b style="font-size:18px;font-weight:500">모둠별 캔바 링크</b><small style="display:block;color:var(--sub);font-size:13px">모둠 수만큼 칸이 생겨요.</small></div>
@@ -633,6 +647,7 @@ body.big .pgrid .rcard .q{font-size:20px}
           <div><span class="lbl">학생이 모둠 정하기</span><div class="seg" data-k="gopen"><button data-v="off">닫기</button><button data-v="on">열기</button></div></div>
           <div><span class="lbl">모둠 수</span><select id="gcount"></select></div>
           <button class="btn" id="gmOpen">모둠 확인하고 바꾸기</button>
+          <button class="btn" id="gnOpen">모둠 이름 정하기</button>
           <button class="btn" id="cvOpen">모둠별 캔바 링크</button>
         </div>
   </div>
@@ -665,6 +680,9 @@ async function rpc(fn,args){
   return j.data;
 }
 const $=id=>document.getElementById(id);
+/* 모둠 이름 (교사가 정함) */
+let GNAMES={};
+const gname=g=>{g=String(g||'');if(!g||g==='?')return '모둠 미정';const n=(GNAMES||{})[g];return n?`${g}모둠 ${n}`:`${g}모둠`};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 let logoN=0;
 function logoSVG(){const id='lg'+(logoN++);return `<svg viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4f6bff"/><stop offset=".55" stop-color="#b25cd9"/><stop offset="1" stop-color="#ff7a8a"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#${id})"/><path d="M13.5 7.5v11.3a3.7 3.7 0 1 0 2.2 3.4V12.4l6.3 1.9V9.4z" fill="#fff"/></svg>`}
@@ -717,9 +735,10 @@ function login(me,save){
 $('logout').onclick=()=>{if(!S.student)return $('login').classList.remove('hide');
   if(!confirm(`${S.student.nm} 님, 다른 학생으로 바꿀까요?`))return;
   store.del('hyegini_me');location.reload()};
-function paintWho(){const id=S.student.id;$('whoId').textContent=`${id[0]}학년 ${id[1]}반 ${Number(id.slice(2))}번`+(S.student.group?`, ${S.student.group}모둠`:'')}
+function paintWho(){const id=S.student.id;$('whoId').textContent=`${id[0]}학년 ${id[1]}반 ${Number(id.slice(2))}번`+(S.student.group?`, ${gname(S.student.group)}`:'')}
 function applyState(st){
   if(!S.student||!st)return;
+  GNAMES=st.groupNames||{};
   paintGem(st.gemUrl);
   S.canvaUrl=st.canvaUrl||'';
   const changed=String(st.myGroup||'')!==String(S.student.group||'');
@@ -728,14 +747,14 @@ function applyState(st){
   $('gbanner').classList.toggle('on',!!open);
   $('gbanner').classList.toggle('picked',!!S.student.group);
   if(open){
-    $('gbTitle').textContent=S.student.group?`✓ ${S.student.group}모둠으로 정했어요`:'모둠을 정해 주세요';
+    $('gbTitle').textContent=S.student.group?`✓ 우리 모둠: ${gname(S.student.group)}`:'모둠을 정해 주세요';
     $('gbSub').textContent=S.student.group?'다른 모둠이면 번호를 다시 눌러요.':'선생님이 모둠 정하기를 열었어요. 내 모둠 번호를 눌러요.';
-    $('groups').innerHTML=Array.from({length:st.groupCount||GROUPS},(_,i)=>{const on=String(i+1)===S.student.group;return `<button data-g="${i+1}" class="${on?'on':''}" aria-pressed="${on}">${on?'✓ ':''}${i+1}모둠</button>`}).join('');
+    $('groups').innerHTML=Array.from({length:st.groupCount||GROUPS},(_,i)=>{const on=String(i+1)===S.student.group;return `<button data-g="${i+1}" class="${on?'on':''}" aria-pressed="${on}">${on?'✓ ':''}${i+1}모둠${GNAMES[i+1]?`<small>${esc(GNAMES[i+1])}</small>`:''}</button>`}).join('');
     $('groups').querySelectorAll('button').forEach(b=>b.onclick=async()=>{
       if(b.classList.contains('on'))return;
-      $('groups').querySelectorAll('button').forEach(x=>{x.classList.remove('on');x.textContent=x.dataset.g+'모둠';x.disabled=true});
-      b.classList.add('on','saving');b.textContent='✓ '+b.dataset.g+'모둠';$('gbTitle').textContent='저장하는 중...';
-      try{applyState(await api('chooseGroup',{id:S.student.id,name:S.student.nm,group:b.dataset.g}));toast(b.dataset.g+'모둠으로 정했어요.')}
+      $('groups').querySelectorAll('button').forEach(x=>{x.classList.remove('on');x.firstChild.textContent=x.dataset.g+'모둠';x.disabled=true});
+      b.classList.add('on','saving');b.firstChild.textContent='✓ '+b.dataset.g+'모둠';$('gbTitle').textContent='저장하는 중...';
+      try{applyState(await api('chooseGroup',{id:S.student.id,name:S.student.nm,group:b.dataset.g}));toast(gname(b.dataset.g)+' 선택 완료!')}
       catch(e){toast(e.message);api('getStudentState',S.student.id).then(applyState).catch(()=>{})}
     });
   }
@@ -843,7 +862,7 @@ function renderPeer(d){
 function card(r,pick){
   const qs=pick&&r.questions&&r.questions.length?r.questions:[r.best];
   return `<div class="rcard ${r.id===S.student.id?'mine':''}" data-id="${esc(r.id)}">
-    <header><span class="avatar">${esc((r.name||'?')[0])}</span><div><b>${esc(r.name)}${r.id===S.student.id?' (나)':''}</b><small>${r.group?r.group+'모둠':''}</small></div></header>
+    <header><span class="avatar">${esc((r.name||'?')[0])}</span><div><b>${esc(r.name)}${r.id===S.student.id?' (나)':''}</b><small>${r.group?esc(gname(r.group)):''}</small></div></header>
     ${pick?qs.map(q=>`<div class="q">${esc(q)}</div>`).join(''):qBlock(r)}
     ${r.why?`<div class="why">${esc(r.why)}</div>`:''}
     <div class="acts"><button class="act like ${r.mine?'on':''}" data-like="${esc(r.id)}">♥ <b>${r.likes||0}</b></button>
@@ -857,7 +876,7 @@ function bindPeer(){
       b.classList.toggle('on',res.mine);b.querySelector('b').textContent=res.count}
     catch(err){toast(err.message)}});
   $('pbBody').querySelectorAll('.rcard').forEach(c=>{
-    const open=()=>{const r=PEER.find(x=>x.id===c.dataset.id);if(r)openFull(r,{name:r.name,sub:r.group?r.group+'모둠':'',init:(r.name||'?')[0]},[],true)};
+    const open=()=>{const r=PEER.find(x=>x.id===c.dataset.id);if(r)openFull(r,{name:r.name,sub:r.group?gname(r.group):'',init:(r.name||'?')[0]},[],true)};
     c.onclick=open;
     c.querySelectorAll('[data-open]').forEach(b=>b.onclick=e=>{e.stopPropagation();open()});
   });
@@ -908,7 +927,7 @@ async function renderV(){
     $('shChat').classList.toggle('on',V.chat);$('shChat').textContent=V.chat?'질문만 보기':'대화 보기';
     return;
   }
-  const cap=`<div class="sv-cap">${esc(it.group?it.group+'모둠':'')} ${esc(it.fileName)}<small>${esc(it.name)}${V.pages>1&&isPdf(it)?` · ${V.page} / ${V.pages}쪽`:''}</small></div>`;
+  const cap=`<div class="sv-cap">${esc(it.group?gname(it.group):'')} ${esc(it.fileName)}<small>${esc(it.name)}${V.pages>1&&isPdf(it)?` · ${V.page} / ${V.pages}쪽`:''}</small></div>`;
   if(!isPdf(it)){
     V.pages=1;$('shCount').textContent=count;
     $('shStage').innerHTML=`<div class="sv-img"><img src="${esc(big(it.thumb,2400))}" alt=""></div>`+cap;return;
@@ -919,7 +938,7 @@ async function renderV(){
     const doc=await getPdf(it);if(tok!==V.tok)return;
     V.pages=doc.numPages;if(V.page==='last'||V.page>V.pages)V.page=V.pages;
     const pg=await doc.getPage(V.page);if(tok!==V.tok)return;
-    $('shStage').innerHTML=`<div class="sv-img"><canvas id="shCanvas"></canvas></div>`+`<div class="sv-cap">${esc(it.group?it.group+'모둠':'')} ${esc(it.fileName)}<small>${esc(it.name)} · ${V.page} / ${V.pages}쪽</small></div>`;
+    $('shStage').innerHTML=`<div class="sv-img"><canvas id="shCanvas"></canvas></div>`+`<div class="sv-cap">${esc(it.group?gname(it.group):'')} ${esc(it.fileName)}<small>${esc(it.name)} · ${V.page} / ${V.pages}쪽</small></div>`;
     const box=$('shStage').querySelector('.sv-img'),W=box.clientWidth,H=box.clientHeight;
     const vp1=pg.getViewport({scale:1}),sc=Math.min(W/vp1.width,H/vp1.height),dpr=window.devicePixelRatio||1;
     const vp=pg.getViewport({scale:sc*dpr}),cv=$('shCanvas');
@@ -937,7 +956,7 @@ function qSlide(r){
   if(V.chat){const turns=splitTurns(r.text||'');
     chat=`<div class="sv-chat">${turns?turns.map(t=>`<div class="turn ${t.who}"><span class="who">${t.who==='me'?esc(w.name):'Hyegini'}</span><div class="tx">${fmt(t.t.trim())}</div></div>`).join(''):`<div class="turn bot"><div class="tx">${fmt(r.text||'대화 내용이 없어요.')}</div></div>`}</div>`}
   return `<div class="sv-q ${V.chat?'with-chat':''}"><div class="sv-main">
-    <div class="sv-who"><span class="avatar">${esc(w.init)}</span><b>${esc(w.name)}</b>${r.group?`<small>${esc(r.group)}모둠</small>`:''}</div>
+    <div class="sv-who"><span class="avatar">${esc(w.init)}</span><b>${esc(w.name)}</b>${r.group?`<small>${esc(gname(r.group))}</small>`:''}</div>
     <div class="sv-label">★ 가장 깊은 질문</div><div class="sv-best">${fmt(r.best)}</div>
     ${qs.length?`<ol class="sv-list">${qs.map(q=>`<li>${fmt(q)}</li>`).join('')}</ol>`:''}
     ${r.why?`<div class="sv-why"><span>고른 이유</span>${esc(r.why)}</div>`:''}</div>${chat}</div>`;
@@ -986,7 +1005,7 @@ async function loadWorks(quiet){
   $('canvaOpen').href=S.canvaUrl||'#';
   $('canvaOpen').classList.toggle('off',!S.canvaUrl);
   $('cvSub').textContent=S.student.group
-    ?`${S.student.group}모둠 캔바에서 카드뉴스를 만들고, 완성본을 PDF나 PNG로 올려요.`
+    ?`${gname(S.student.group)} 캔바에서 카드뉴스를 만들고, 완성본을 PDF나 PNG로 올려요.`
     :'먼저 모둠을 정하면 우리 모둠 캔바가 열려요.';
   if(!quiet)$('works').innerHTML='<div class="loading"><span class="dots"><span></span><span></span><span></span></span>불러오는 중</div>';
   try{WORKS=await api('getWorks',{id:S.student.id});renderWorks()}
@@ -996,7 +1015,7 @@ $('canvaOpen').onclick=e=>{if(!S.canvaUrl){e.preventDefault();toast(S.student&&S
 function renderWorks(){
   if(!WORKS.length){$('works').innerHTML='<div class="empty">아직 올라온 카드뉴스가 없어요. 우리 모둠이 첫 번째로 올려 볼까요?</div>';return}
   const gs=[...new Set(WORKS.map(w=>String(w.group||'?')))].sort((a,b)=>(+a||99)-(+b||99));
-  $('works').innerHTML=gs.map(g=>`<section class="gsec ${g===String(S.student.group)?'mine':''}"><h3>${g==='?'?'모둠 미정':g+'모둠'}<span class="pill">${WORKS.filter(w=>String(w.group)===g).length}개</span></h3>
+  $('works').innerHTML=gs.map(g=>`<section class="gsec ${g===String(S.student.group)?'mine':''}"><h3>${esc(gname(g))}<span class="pill">${WORKS.filter(w=>String(w.group)===g).length}개</span></h3>
     <div class="wgrid">${WORKS.filter(w=>String(w.group)===g).map(w=>`<figure class="work">
       ${tile(w)}
       <figcaption>${esc(w.fileName)}<a href="${esc(w.url)}" target="_blank" rel="noopener">원본</a><small>${esc(w.name)}</small></figcaption>
@@ -1036,10 +1055,25 @@ function paintGemMsg(){
   $('gemMsg').textContent=!u?'아직 연결 안 됨':/gemini\.google\.com|g\.co\/gemini/.test(u)?'연결됨':'연결됨 (Gem 링크가 맞는지 확인해 주세요)';
 }
 
+/* 모둠 이름 */
+$('gnOpen').onclick=()=>{
+  const n=SET.gcount||GROUPS,gn=SET.gnames||{};
+  $('gnList').innerHTML=Array.from({length:n},(_,i)=>`<label class="gnrow"><span>${i+1}모둠</span><input data-g="${i+1}" maxlength="12" value="${esc(gn[i+1]||'')}" placeholder="예: 그레고리오팀"></label>`).join('');
+  $('gnModal').classList.remove('hide');setTimeout(()=>{const f=$('gnList').querySelector('input');f&&f.focus()},50);
+};
+$('gnClose').onclick=()=>$('gnModal').classList.add('hide');
+$('gnModal').onclick=e=>{if(e.target.id==='gnModal')$('gnModal').classList.add('hide')};
+$('gnSave').onclick=async()=>{
+  const map={};$('gnList').querySelectorAll('input').forEach(i=>{const v=i.value.trim();if(v)map[i.dataset.g]=v});
+  try{await api('setGroupNames',S.pw,map);SET.gnames=map;GNAMES=map;$('gnModal').classList.add('hide');paintSum();rerender();if(S.tview==='w')renderTWorks();
+    toast(Object.keys(map).length?'모둠 이름을 저장했어요. 학생 화면에 바로 보여요.':'모둠 이름을 지웠어요.')}
+  catch(e){toast('저장하지 못했어요: '+e.message)}
+};
+
 /* 모둠별 캔바 링크 */
 $('cvOpen').onclick=()=>{
   const n=SET.gcount||GROUPS,cv=SET.canva||{};
-  $('cvLinks').innerHTML=Array.from({length:n},(_,i)=>`<label class="cvlink"><span>${i+1}모둠</span><input data-g="${i+1}" value="${esc(cv[i+1]||'')}" placeholder="https://www.canva.com/design/..."></label>`).join('');
+  $('cvLinks').innerHTML=Array.from({length:n},(_,i)=>`<label class="cvlink"><span title="${esc(gname(i+1))}">${i+1}모둠</span><input data-g="${i+1}" value="${esc(cv[i+1]||'')}" placeholder="https://www.canva.com/design/..."></label>`).join('');
   $('cvModal').classList.remove('hide');
 };
 $('cvClose').onclick=()=>$('cvModal').classList.add('hide');
@@ -1077,7 +1111,7 @@ function renderTWorks(){
   const ws=TWORKS.filter(inCls);
   $('twStatus').innerHTML=`${S.cls==='all'?'전체 반':S.cls[0]+'학년 '+S.cls[1]+'반'} 카드뉴스 <b>${ws.length}개</b>`;
   if(!ws.length){$('twBody').innerHTML='<div class="empty">아직 올라온 카드뉴스가 없어요.</div>';return}
-  const key=w=>(S.cls==='all'?clsOf(w.id)[1]+'반 ':'')+(w.group?w.group+'모둠':'모둠 미정');
+  const key=w=>(S.cls==='all'?clsOf(w.id)[1]+'반 ':'')+gname(w.group);
   const keys=[...new Set(ws.map(key))].sort((a,b)=>a.localeCompare(b,'ko',{numeric:true}));
   $('twBody').innerHTML=keys.map(k=>{const list=ws.filter(w=>key(w)===k);
     return `<section class="gsec"><h3>${esc(k)}<span class="pill">${list.length}개</span></h3><div class="wgrid">${list.map(w=>`<figure class="work">
@@ -1136,13 +1170,13 @@ function renderGM(){
   if(!list.length){$('gmCols').innerHTML='<div class="empty">아직 접속한 학생이 없어요.</div>';return}
   $('gmSub').textContent=`학생 옆 번호를 바꾸면 바로 저장돼요. 모둠 미정 ${list.filter(r=>!r.group).length}명`;
   const n=SET.gcount||GROUPS,cols=['',...Array.from({length:n},(_,i)=>String(i+1))];
-  const opts=g=>['',...cols.slice(1)].map(v=>`<option value="${v}" ${v===g?'selected':''}>${v?v+'모둠':'미정'}</option>`).join('');
+  const opts=g=>['',...cols.slice(1)].map(v=>`<option value="${v}" ${v===g?'selected':''}>${v?esc(gname(v)):'미정'}</option>`).join('');
   $('gmCols').innerHTML=cols.map(c=>{const m=list.filter(r=>(r.group||'')===c);if(!c&&!m.length)return'';
-    return `<div class="gm-col ${c?'':'none'}"><h5>${c?c+'모둠':'모둠 미정'}<span>${m.length}명</span></h5>
+    return `<div class="gm-col ${c?'':'none'}"><h5>${esc(gname(c))}<span>${m.length}명</span></h5>
     ${m.map(r=>`<div class="gm-chip"><span class="nm">${esc(r.name)}<small>${esc(r.id)}</small></span><select data-id="${esc(r.id)}">${opts(r.group||'')}</select></div>`).join('')}</div>`}).join('');
   $('gmCols').querySelectorAll('select').forEach(sel=>sel.onchange=async()=>{
     const r=ROSTER.find(x=>x.id===sel.dataset.id),prev=r.group;r.group=sel.value;renderGM();
-    try{await api('setGroup',S.pw,r.id,r.group);toast(`${r.name} 학생을 ${r.group?r.group+'모둠':'모둠 미정'}으로 옮겼어요.`);
+    try{await api('setGroup',S.pw,r.id,r.group);toast(`${r.name} 학생 → ${gname(r.group)}`);
       S.board.forEach(b=>{if(b.id===r.id)b.group=r.group});if(S.byGroup)rerender()}
     catch(e){r.group=prev;renderGM();toast('저장하지 못했어요: '+e.message)}
   });
@@ -1159,7 +1193,7 @@ function paintSum(){
     SET.gemUrl?['Gem 연결됨','ok']:['Gem 링크 없음','warn'], m,
     [SET.show==='full'?'대화 전체까지 보임':'가장 깊은 질문만 보임',''],
     SET.gopen==='on'?['모둠 정하기 열림','ok']:['모둠 정하기 닫힘',''],
-    [`모둠 ${SET.gcount||GROUPS}개`,''], cv?[`캔바 링크 ${cv}개`,'ok']:['캔바 링크 없음','warn']
+    [`모둠 ${SET.gcount||GROUPS}개`+(Object.keys(SET.gnames||{}).length?' (이름 있음)':''),''], cv?[`캔바 링크 ${cv}개`,'ok']:['캔바 링크 없음','warn']
   ].map(([t,c])=>`<span class="${c}">${t}</span>`).join('');
 }
 function paintSeg(){paintSum();document.querySelectorAll('.seg').forEach(seg=>seg.querySelectorAll('button').forEach(b=>b.classList.toggle('on',SET[seg.dataset.k]===b.dataset.v)))}
@@ -1170,7 +1204,7 @@ document.querySelectorAll('.seg').forEach(seg=>seg.querySelectorAll('button').fo
 
 async function loadBoard(){
   $('results').innerHTML='<div class="loading"><span class="dots"><span></span><span></span><span></span></span>불러오는 중</div>';
-  try{SET=await api('getSettings');paintSeg();paintGemMsg();paintGem(SET.gemUrl);$('gcount').value=SET.gcount}
+  try{SET=await api('getSettings');GNAMES=SET.gnames||{};paintSeg();paintGemMsg();paintGem(SET.gemUrl);$('gcount').value=SET.gcount}
   catch(e){$('results').innerHTML=`<div class="empty">설정을 불러오지 못했어요: ${esc(e.message)}</div>`;return}
   try{
     const [board,shared,roster]=await Promise.all([api('getBoard',S.pw),api('getShared',S.pw),api('getGroups',S.pw)]);
@@ -1196,7 +1230,7 @@ function who(r){
   const i=S.board.findIndex(b=>String(b.id)===String(r.id));
   return S.hide?{name:'학생 '+(i+1),sub:'',init:'?'}:{name:r.name,sub:r.id,init:(r.name||'?')[0]};
 }
-function gkey(r){return (S.cls==='all'&&renderCls.multi?clsOf(r.id)[1]+'반 ':'')+(r.group?r.group+'모둠':'모둠 미정')}
+function gkey(r){return (S.cls==='all'&&renderCls.multi?clsOf(r.id)[1]+'반 ':'')+gname(r.group)}
 function layout(items,cardFn){
   if(!S.byGroup)return '<div class="gsec"><div class="pgrid">'+items.map(cardFn).join('')+'</div></div>';
   renderCls.multi=new Set(items.map(r=>clsOf(r.id))).size>1;
@@ -1250,7 +1284,7 @@ function bindCards(){
 }
 function openFull(r,w,tokens,canComment){
   CUR={r:r,w:w,canComment:!!canComment};
-  $('fAv').textContent=w.init;$('fName').textContent=w.name+(w.sub?' ('+w.sub+')':'')+(r.group&&!w.sub?', '+r.group+'모둠':'');$('fTime').textContent=r.time||'';
+  $('fAv').textContent=w.init;$('fName').textContent=w.name+(w.sub?' ('+w.sub+')':'')+(r.group&&!w.sub?', '+gname(r.group):'');$('fTime').textContent=r.time||'';
   $('fBest').innerHTML=`<b>가장 깊은 질문</b><div class="bq">${esc(r.best)}</div>${r.why?`<div class="bw">${esc(r.why)}</div>`:''}`;
   const fmt=t=>(tokens&&tokens.length)?hl(t,tokens):esc(t);
   const turns=splitTurns(r.text||'');
@@ -1377,12 +1411,12 @@ const SAMPLE=[
   text:'단선율이랑 다성 음악은 뭐가 달라?\n\n단선율은 하나의 선율만, 다성 음악은 둘 이상의 성부가 함께 움직여.\n\n중세 교회 음악이 오늘날 합창곡에 어떤 영향을 줬을까?\n\n좋은 연결이야. 오늘날 성부 이름에서 힌트를 찾아볼래?'}
 ];
 SAMPLE.forEach(x=>{if(x.id!=='3101')x.text=x.text.split('\n\n').map((p,i)=>(i%2?'[Hyegini] ':'[나] ')+p).join('\n\n')});
-const SET_DEMO={mode:'all',show:'full',gopen:'on',gcount:5,canva:{}};
+const SET_DEMO={mode:'all',show:'full',gopen:'on',gcount:5,canva:{},gnames:{}};
 const LIKES={},CMTS={};let WORKS_DEMO=[],cmtN=0;
 const DEMO_G={};SAMPLE.forEach(x=>DEMO_G[x.id]={id:x.id,name:x.name,group:x.group});
 let SHARED_DEMO={title:'',items:{}};SET_DEMO.gemUrl='';
 const demoState=id=>{const g=(DEMO_G[id]||{}).group||'';
-  return{gemUrl:SET_DEMO.gemUrl,canvaUrl:SET_DEMO.canva[g]||'',groupOpen:SET_DEMO.gopen==='on',groupCount:SET_DEMO.gcount,myGroup:g}};
+  return{gemUrl:SET_DEMO.gemUrl,groupNames:SET_DEMO.gnames,canvaUrl:SET_DEMO.canva[g]||'',groupOpen:SET_DEMO.gopen==='on',groupCount:SET_DEMO.gcount,myGroup:g}};
 const deco=(r,me)=>({...r,group:(DEMO_G[r.id]||{}).group||'',likes:(LIKES[r.id]||[]).length,mine:(LIKES[r.id]||[]).includes(me),comments:CMTS[r.id]||[]});
 const DEMO={
   checkTeacher:pw=>pw==='1234',
@@ -1393,6 +1427,7 @@ const DEMO={
   getStudentState:id=>demoState(id),
   setGemUrl:(pw,u)=>{SET_DEMO.gemUrl=u;return true},
   setCanva:(pw,m)=>{SET_DEMO.canva=m;return true},
+  setGroupNames:(pw,m)=>{SET_DEMO.gnames=m;return true},
   toggleLike:d=>{const a=LIKES[d.target]=LIKES[d.target]||[];const i=a.indexOf(d.id);i>=0?a.splice(i,1):a.push(d.id);return{count:a.length,mine:i<0}},
   addComment:d=>{(CMTS[d.target]=CMTS[d.target]||[]).push({key:'c'+(++cmtN),id:d.id,name:d.name,text:d.text,time:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})});return CMTS[d.target]},
   deleteComment:d=>{Object.keys(CMTS).forEach(k=>CMTS[k]=CMTS[k].filter(c=>c.key!==d.key));return CMTS[CUR&&CUR.r?CUR.r.id:'']||[]},
