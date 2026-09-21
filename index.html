@@ -100,11 +100,15 @@ a{color:inherit}
 .howto ol{padding-left:20px}
 .howto li{margin:4px 0}
 .howto .alt{margin-top:10px;font-size:14px;color:var(--sub);background:var(--chip);border-radius:10px;padding:10px 12px}
-.turn{margin:0 0 14px}
-.turn .who{display:table;font-size:12px;padding:1px 9px;border-radius:10px;margin-bottom:3px;font-weight:500}
-.turn.me .who{background:#d3e3fd;color:#0b3a8c}
-.turn.bot .who{background:#f3e8fb;color:#7b2fa8}
-.turn.bot .tx{color:#444746}
+.turn{display:flex;flex-direction:column;margin:0 0 16px;white-space:normal}
+.turn .who{font-size:12px;font-weight:500;margin:0 6px 4px;color:var(--sub)}
+.turn .tx{white-space:pre-wrap;font-size:15px;line-height:1.7;padding:11px 16px;word-break:keep-all}
+.turn.me{align-items:flex-end}
+.turn.me .who{color:#0b3a8c}
+.turn.me .tx{background:#e9eef6;border-radius:20px 6px 20px 20px;max-width:85%}
+.turn.bot{align-items:flex-start}
+.turn.bot .who{color:#7b2fa8}
+.turn.bot .tx{background:#fff;border:1px solid var(--line);border-radius:6px 20px 20px 20px;max-width:90%;color:#303134}
 .detect{font-size:13px;margin:-8px 0 16px;color:var(--sub)}
 .detect.good{color:#0d652d}
 .detect.warn{color:#b06000}
@@ -131,15 +135,27 @@ a{color:inherit}
 .cv-my label{cursor:pointer}
 .cv-my #upMsg{font-size:13px;color:var(--sub)}
 .btn.off,.btn.primary.off{background:#9aa0a6;border-color:#9aa0a6;color:#fff}
-.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px}
-.work{position:relative;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin:0}
-.work a{display:block;aspect-ratio:4/3;background:var(--chip);display:grid;place-items:center;overflow:hidden}
-.work img{width:100%;height:100%;object-fit:cover;display:block}
+.wgrid{columns:3 260px;column-gap:16px}
+.work{position:relative;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;margin:0 0 16px;break-inside:avoid;box-shadow:0 1px 3px rgba(60,64,67,.08)}
+.work .wimg{display:block;width:100%;padding:0;background:var(--chip);cursor:zoom-in;min-height:120px}
+.work img{width:100%;height:auto;display:block}
+.work a.pdfbox{aspect-ratio:4/3;background:#fdf3f2;display:grid;place-items:center;text-decoration:none}
+.work figcaption a{color:var(--blue);font-size:12px;text-decoration:none;margin-left:6px}
+.lb{position:fixed;inset:0;background:rgba(15,15,18,.92);z-index:70;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:48px 64px 24px}
+.lb.hide{display:none}
+.lb img{max-width:100%;max-height:calc(100vh - 120px);object-fit:contain;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.5);background:#fff}
+.lb .cap{color:#e8eaed;font-size:14px;margin-top:12px;text-align:center}
+.lb .cap small{display:block;color:#9aa0a6;font-size:12.5px}
+.lb button{position:absolute;color:#fff;background:rgba(255,255,255,.12);width:48px;height:48px;border-radius:50%;font-size:26px;display:grid;place-items:center}
+.lb button:hover{background:rgba(255,255,255,.25)}
+.lb .x{top:14px;right:16px;font-size:20px}
+.lb .pv{left:14px;top:50%;transform:translateY(-50%)}
+.lb .nx{right:14px;top:50%;transform:translateY(-50%)}
 .work .pdf{font-weight:700;color:#b3261e;font-size:22px;letter-spacing:1px}
 .work figcaption{padding:8px 10px;font-size:12.5px;line-height:1.4;word-break:break-all}
 .work figcaption small{display:block;color:var(--sub);margin-top:2px}
 .work .del{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;background:rgba(32,33,36,.6);color:#fff;font-size:13px;display:grid;place-items:center}
-.acts{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.acts{display:flex;gap:6px;margin-top:14px;padding-top:12px;border-top:1px solid #eef0f3;flex-wrap:wrap}
 .act{font-size:13px;padding:5px 12px;border-radius:16px;border:1px solid var(--line);background:#fff;color:var(--sub)}
 .act:hover{background:var(--hover)}
 .act.on{background:#fde7f3;border-color:#f6c6e2;color:#a0246c}
@@ -178,14 +194,26 @@ a{color:inherit}
 .tog{font-size:13px;padding:7px 14px;border-radius:18px;border:1px solid var(--line);background:#fff}
 .tog.on{background:#d3e3fd;border-color:#d3e3fd;color:#0b3a8c}
 .results{max-width:1100px;margin:0 auto;columns:3 300px;column-gap:14px}
-.rcard{break-inside:avoid;margin-bottom:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;cursor:pointer;display:block;width:100%;text-align:left}
+.rcard{break-inside:avoid;margin-bottom:16px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:20px 22px 16px;cursor:pointer;display:block;width:100%;text-align:left;box-shadow:0 1px 3px rgba(60,64,67,.06);transition:box-shadow .15s,border-color .15s}
+.rcard:hover{box-shadow:0 4px 14px rgba(60,64,67,.12)}
 .rcard:hover{border-color:#c6d4ea;background:#fbfcfe}
 .rcard header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
 .rcard header .avatar{width:30px;height:30px;font-size:13px}
 .rcard header b{font-weight:500;font-size:14.5px;display:block;line-height:1.2}
 .rcard header small{color:var(--sub);font-size:12px}
-.rcard .q{font-size:16.5px;line-height:1.6;padding:6px 0 6px 14px;border-left:3px solid var(--g2);margin:8px 0;word-break:keep-all}
-.rcard .why{font-size:13.5px;color:#444746;margin-top:6px}
+.rcard .q{font-size:17.5px;line-height:1.7;font-weight:500;color:#1f1f1f;padding:2px 0 2px 14px;border-left:3px solid var(--g2);margin:10px 0;word-break:keep-all}
+.rcard .why{font-size:14px;line-height:1.7;color:#3c4043;background:#f8f9fb;border-radius:12px;padding:10px 14px;margin-top:12px;word-break:keep-all}
+.rcard .bestq{margin:12px 0 4px;padding:12px 14px;border-radius:14px;background:linear-gradient(135deg,#f1f4ff,#faf3fd)}
+.rcard .bestq span{display:block;font-size:11.5px;font-weight:700;color:#7b2fa8;margin-bottom:3px;letter-spacing:.2px}
+.rcard .bestq p{font-size:17px;line-height:1.65;font-weight:500;color:#1f1f1f;word-break:keep-all}
+.rcard .qlist{list-style:none;margin:12px 0 0;padding:0}
+.rcard .qlist .qh{font-size:11.5px;font-weight:500;color:var(--sub);margin-bottom:4px}
+.rcard .qlist li{position:relative;font-size:14.5px;line-height:1.6;color:#303134;padding:5px 0 5px 22px;border-bottom:1px dashed #eceff3;word-break:keep-all}
+.rcard .qlist li:last-child{border-bottom:0}
+.rcard .qlist li::before{content:"Q";position:absolute;left:0;top:6px;font-size:11px;font-weight:700;color:#fff;background:#8ab4f8;width:16px;height:16px;border-radius:5px;display:grid;place-items:center;line-height:1}
+.rcard .qlist .more-q{font-size:12.5px;color:var(--blue);padding:6px 0 0 0}
+.rcard .qlist .qh::before,.rcard .qlist .more-q::before{display:none}
+.rcard .why::before{content:"고른 이유";display:block;font-size:11.5px;font-weight:500;color:var(--sub);margin-bottom:2px}
 .rcard .note{font-size:12.5px;color:var(--sub);margin-top:8px;display:flex;gap:6px;align-items:center}
 .rcard .note svg{width:14px;height:14px;flex-shrink:0}
 mark{background:linear-gradient(transparent 58%,#f6d3f2 58%);color:inherit}
@@ -213,12 +241,42 @@ body.big .side{display:none}
 .modal .box.wide{max-width:760px;max-height:84vh;display:flex;flex-direction:column}
 .full-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .full-head .icon-btn{margin-left:auto}
-.full-best{background:var(--chip);border-radius:14px;padding:12px 16px;margin-bottom:12px}
-.full-best b{font-weight:500}
-.full-text{overflow-y:auto;white-space:pre-wrap;font-size:14.5px;line-height:1.75;border-top:1px solid var(--line);padding-top:12px}
+.full-best{background:linear-gradient(135deg,#f3f6fc,#faf5fd);border-radius:16px;padding:14px 18px;margin-bottom:14px}
+.full-best b{display:block;font-weight:500;font-size:12px;color:var(--sub);margin-bottom:4px}
+.full-best .bq{font-size:18px;font-weight:500;line-height:1.6;word-break:keep-all}
+.full-best .bw{font-size:14px;color:#444746;line-height:1.65;margin-top:8px;word-break:keep-all}
+.full-text{overflow-y:auto;white-space:pre-wrap;font-size:15px;line-height:1.75;border-top:1px solid var(--line);padding-top:16px}
 .toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);background:#303134;color:#fff;padding:12px 20px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:.25s;z-index:60}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
+/* login pickers */
+.glabel{font-size:13px;color:var(--sub);margin:4px 0 6px;display:block}
+.pick{display:grid;gap:6px;margin-bottom:12px}
+.pick.g3{grid-template-columns:repeat(3,1fr)}
+.pick.c9{grid-template-columns:repeat(5,1fr)}
+.pick button{padding:9px 0;border-radius:10px;border:1px solid var(--line);font-size:14px;background:#fff;transition:transform .08s,box-shadow .08s}
+.pick button:active{transform:scale(.95)}
+.pick button.on{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700;box-shadow:inset 0 3px 6px rgba(0,0,0,.28);transform:translateY(1px)}
+.row2{display:flex;gap:8px}
+.row2 input:first-child{width:96px;flex:none}
+.id-preview{font-size:13.5px;color:var(--blue);min-height:20px;margin:-2px 0 6px;font-weight:500}
+.me .out{margin-left:auto;font-size:12px;color:var(--sub);padding:4px 8px;border-radius:10px}
+.me .out:hover{background:var(--hover)}
+/* teacher tabs */
+.ctabs{max-width:1100px;margin:18px auto 0;display:flex;gap:6px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--line);padding-bottom:10px}
+.ctabs .lbl{font-size:13px;color:var(--sub);margin-right:4px}
+.ctabs button{padding:8px 16px;border-radius:12px 12px 0 0;font-size:14px;color:var(--sub);border:1px solid transparent}
+.ctabs button.on{background:#d3e3fd;color:#0b3a8c;font-weight:700}
+.vtabs{max-width:1100px;margin:14px auto 0;display:flex;gap:8px}
+.vtabs button{padding:10px 20px;border-radius:22px;font-size:14.5px;border:1px solid var(--line);background:#fff}
+.vtabs button.on{background:var(--ink);color:#fff;border-color:var(--ink);font-weight:500}
+.setwrap{max-width:1100px;margin:14px auto 0}
+.setwrap>summary{cursor:pointer;font-size:14px;color:var(--sub);padding:6px 4px;list-style:none}
+.setwrap>summary::before{content:"⚙ "}
+.setwrap .settings{margin-top:6px}
+.btn.danger{color:#b3261e;border-color:#f3c2bd}
+.btn.danger:hover{background:#fdecea}
+.work .del.t{background:#b3261e}
 /* groups, peer board, settings */
 .groups{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}
 .groups button{padding:9px 0;border-radius:10px;border:1px solid var(--line);font-size:14px}
@@ -228,8 +286,12 @@ body.big .side{display:none}
 .gbanner b{font-weight:500}
 .gbanner p{font-size:13px;color:var(--sub)}
 .gbanner .groups{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 0 auto}
-.gbanner .groups button{padding:7px 14px;background:#fff}
-.gbanner .groups button.on{background:var(--blue)}
+.gbanner .groups button{padding:8px 16px;background:#fff;transition:transform .08s,box-shadow .08s}
+.gbanner .groups button:active{transform:scale(.94)}
+.gbanner .groups button.on{background:var(--blue);color:#fff;border-color:var(--blue);font-weight:700;box-shadow:inset 0 3px 7px rgba(0,0,0,.3);transform:translateY(1px)}
+.gbanner .groups button.saving{opacity:.75}
+.gbanner .groups button[disabled]:not(.on){opacity:.5}
+.gbanner.picked{background:linear-gradient(90deg,#e6f4ea,#eef1ff)}
 .gm-cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;overflow-y:auto;padding-bottom:4px}
 .gm-col{background:var(--chip);border-radius:14px;padding:10px}
 .gm-col h5{font-size:14px;font-weight:500;margin:2px 4px 8px;display:flex;justify-content:space-between}
@@ -248,7 +310,7 @@ body.big .side{display:none}
 .gsec h3{font-size:15px;font-weight:500;margin:0 0 10px;display:flex;align-items:center;gap:8px}
 .gsec h3 .pill{font-size:12px;background:var(--chip);color:var(--sub);padding:2px 10px;border-radius:12px;font-weight:400}
 .gsec.mine h3 .pill{background:#d3e3fd;color:#0b3a8c}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;align-items:start}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:16px;align-items:start}
 .pgrid .rcard{margin-bottom:0}
 .rcard header .pin{margin-left:auto;font-size:12px;padding:4px 10px;border-radius:14px;border:1px solid var(--line);background:#fff;color:var(--sub);flex-shrink:0}
 .rcard header .pin:hover{background:var(--hover)}
@@ -312,6 +374,7 @@ body.big .pgrid .rcard .q{font-size:20px}
     <div class="me">
       <div class="avatar" id="av">?</div>
       <div class="who hide-c"><span id="whoName">로그인 전</span><small id="whoId">학번을 입력해 주세요</small></div>
+      <button class="out hide-c" id="logout" title="다른 학생으로 바꾸기">바꾸기</button>
     </div>
   </aside>
 
@@ -410,6 +473,9 @@ body.big .pgrid .rcard .q{font-size:20px}
           <h1 class="grad">어떤 질문을 찾아볼까요?</h1>
           <p id="tvCount">제출물을 불러오는 중이에요.</p>
         </div>
+        <div class="ctabs" id="clsbar"></div>
+        <div class="vtabs"><button data-v="q" class="on">질문 게시판</button><button data-v="w">카드뉴스 게시판</button></div>
+        <details class="setwrap" id="setwrap" open><summary>수업 설정 (Gem 링크, 게시판 공개, 모둠, 캔바)</summary>
         <div class="settings">
           <h4>Gem 챗봇 연결</h4>
           <div class="gemrow"><input id="gemUrl" placeholder="Gem 공유 링크를 붙여넣으세요 (https://gemini.google.com/gem/...)">
@@ -422,15 +488,14 @@ body.big .pgrid .rcard .q{font-size:20px}
           <div><span class="lbl">모둠 수</span><select id="gcount"></select></div>
           <button class="btn" id="gmOpen">모둠 확인하고 바꾸기</button>
           <button class="btn" id="cvOpen">모둠별 캔바 링크</button>
-          <button class="btn" id="cvGal">카드뉴스 모아 보기</button>
-        </div>
+        </div></details>
+        <div id="qPane">
         <div class="tsearch">
           <div class="composer">
             <input id="tq" placeholder="예: 중세 시대와 관련된 질문">
             <button class="send" id="tsend" aria-label="찾기"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
           </div>
           <div class="chips" id="tchips"></div>
-          <div class="chips" id="clsbar"></div>
         </div>
         <div class="toolbar">
           <span class="status" id="tvStatus"></span>
@@ -443,6 +508,11 @@ body.big .pgrid .rcard .q{font-size:20px}
         </div>
         <div class="share-bar" id="shareBar"><span id="shareInfo"></span><button class="tog" id="clearShare">공개 목록 비우기</button></div>
         <div id="results"></div>
+        </div>
+        <div id="wPane" style="display:none">
+          <div class="toolbar"><span class="status" id="twStatus"></span><button class="tog" id="twReload">새로고침</button></div>
+          <div id="twBody"></div>
+        </div>
       </div>
     </section>
   </main>
@@ -454,8 +524,8 @@ body.big .pgrid .rcard .q{font-size:20px}
     <span class="logo"></span>
     <h2>Hyegini 시작하기</h2>
     <p>학번과 이름을 입력하면 제출물이 선생님께 전달돼요.</p>
-    <input id="sid" inputmode="numeric" maxlength="4" placeholder="학번 4자리 (예: 3105)">
-    <input id="sname" maxlength="10" placeholder="이름">
+    <div class="row2"><input id="sid" inputmode="numeric" maxlength="4" placeholder="학번 (예: 3105)" style="width:150px"><input id="sname" maxlength="10" placeholder="이름"></div>
+    <div class="id-preview" id="idPreview"></div>
     <div class="err" id="err"></div>
     <button class="btn primary" id="startBtn" style="width:100%">시작하기</button>
     <button class="link" id="toTeacher">선생님이신가요?</button>
@@ -477,6 +547,7 @@ body.big .pgrid .rcard .q{font-size:20px}
 <div class="modal hide" id="fullModal">
   <div class="box wide">
     <div class="full-head"><div class="avatar" id="fAv">?</div><div><b id="fName"></b><small id="fTime" style="display:block;color:var(--sub);font-size:12px"></small></div>
+      <button class="btn danger" id="fDel" style="display:none;margin-left:auto;padding:7px 14px">제출물 삭제</button>
       <button class="icon-btn" id="fClose" aria-label="닫기"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
     <div class="full-best" id="fBest"></div>
     <div class="full-text" id="fText"></div>
@@ -500,13 +571,8 @@ body.big .pgrid .rcard .q{font-size:20px}
     <button class="btn primary" id="cvSave" style="width:100%;margin-top:14px">저장</button>
   </div>
 </div>
-<div class="modal hide" id="galModal">
-  <div class="box wide" style="max-width:1000px">
-    <div class="full-head"><b style="font-size:18px;font-weight:500">모둠 카드뉴스</b>
-      <button class="icon-btn" id="galClose" aria-label="닫기"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <div class="full-text" id="galBody" style="border-top:0"></div>
-  </div>
-</div>
+<div class="lb hide" id="lb"><button class="x" id="lbX" aria-label="닫기">✕</button><button class="pv" id="lbP" aria-label="이전">‹</button>
+  <img id="lbImg" alt=""><div class="cap" id="lbCap"></div><button class="nx" id="lbN" aria-label="다음">›</button></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -522,6 +588,7 @@ const LESSONS=[
 ];
 const STEPS=['Gem과 대화하기','대화 제출하기','게시판','카드뉴스(캔바)'];
 const GROUPS=5; // 기본 모둠 수
+const CLASSES=9; // 반 수 (학번 4자리라 최대 9반)
 const TCHIPS=['중세 시대와 관련된 질문','과학이나 수학과 연결한 질문','만약 ~라면 하고 상상한 질문','오늘날 음악과 연결한 질문'];
 
 /* ================= 공통 ================= */
@@ -561,16 +628,31 @@ const S={student:null,pw:null,view:'home',step:1,best:'',
   board:[],hide:false,last:null,cls:'all',byGroup:false,canvaUrl:''};
 
 /* ================= 로그인 ================= */
+const store={get(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+function paintPick(){paintIdPreview()}
+function paintIdPreview(){
+  const id=$('sid').value.trim(),nm=$('sname').value.trim();
+  $('idPreview').textContent=/^\d{4}$/.test(id)?`${id[0]}학년 ${id[1]}반 ${Number(id.slice(2))}번`+(nm?` ${nm}`:''):'';
+}
+$('sid').addEventListener('input',e=>{e.target.value=e.target.value.replace(/\D/g,'').slice(0,4);paintIdPreview();if(e.target.value.length===4)$('sname').focus()});
+$('sname').addEventListener('input',paintIdPreview);
 $('startBtn').onclick=()=>{
   const id=$('sid').value.trim(),nm=$('sname').value.trim();
-  if(!/^\d{4}$/.test(id))return $('err').textContent='학번은 숫자 4자리로 입력해 주세요.';
+  if(!/^\d{4}$/.test(id))return $('err').textContent='학번은 숫자 4자리로 입력해 주세요. (예: 3105)';
   if(!nm)return $('err').textContent='이름을 입력해 주세요.';
-  S.student={id,nm,group:''};$('login').classList.add('hide');
-  $('av').textContent=nm[0];$('whoName').textContent=nm;paintWho();
-  api('hello',{id,name:nm}).then(applyState).catch(()=>{});
-  clearInterval(S.stTimer);S.stTimer=setInterval(()=>api('getStudentState',id).then(applyState).catch(()=>{}),20000);
-  $('helloName').textContent=`안녕하세요, ${nm} 님`;
+  login({id,nm},true);
 };
+function login(me,save){
+  S.student={id:me.id,nm:me.nm,group:''};$('login').classList.add('hide');$('err').textContent='';
+  $('av').textContent=me.nm[0];$('whoName').textContent=me.nm;paintWho();
+  if(save)store.set('hyegini_me',{id:me.id,nm:me.nm});
+  api('hello',{id:me.id,name:me.nm}).then(applyState).catch(()=>{});
+  clearInterval(S.stTimer);S.stTimer=setInterval(()=>api('getStudentState',me.id).then(applyState).catch(()=>{}),20000);
+  $('helloName').textContent=`안녕하세요, ${me.nm} 님`;
+}
+$('logout').onclick=()=>{if(!S.student)return $('login').classList.remove('hide');
+  if(!confirm(`${S.student.nm} 님, 다른 학생으로 바꿀까요?`))return;
+  store.del('hyegini_me');location.reload()};
 function paintWho(){const id=S.student.id;$('whoId').textContent=`${id[0]}학년 ${id[1]}반 ${Number(id.slice(2))}번`+(S.student.group?`, ${S.student.group}모둠`:'')}
 function applyState(st){
   if(!S.student||!st)return;
@@ -580,13 +662,17 @@ function applyState(st){
   S.student.group=String(st.myGroup||'');paintWho();
   const open=st.groupOpen&&S.view!=='teacher';
   $('gbanner').classList.toggle('on',!!open);
+  $('gbanner').classList.toggle('picked',!!S.student.group);
   if(open){
-    $('gbTitle').textContent=S.student.group?`지금 ${S.student.group}모둠이에요`:'모둠을 정해 주세요';
+    $('gbTitle').textContent=S.student.group?`✓ ${S.student.group}모둠으로 정했어요`:'모둠을 정해 주세요';
     $('gbSub').textContent=S.student.group?'다른 모둠이면 번호를 다시 눌러요.':'선생님이 모둠 정하기를 열었어요. 내 모둠 번호를 눌러요.';
-    $('groups').innerHTML=Array.from({length:st.groupCount||GROUPS},(_,i)=>`<button data-g="${i+1}" class="${String(i+1)===S.student.group?'on':''}">${i+1}모둠</button>`).join('');
+    $('groups').innerHTML=Array.from({length:st.groupCount||GROUPS},(_,i)=>{const on=String(i+1)===S.student.group;return `<button data-g="${i+1}" class="${on?'on':''}" aria-pressed="${on}">${on?'✓ ':''}${i+1}모둠</button>`}).join('');
     $('groups').querySelectorAll('button').forEach(b=>b.onclick=async()=>{
+      if(b.classList.contains('on'))return;
+      $('groups').querySelectorAll('button').forEach(x=>{x.classList.remove('on');x.textContent=x.dataset.g+'모둠';x.disabled=true});
+      b.classList.add('on','saving');b.textContent='✓ '+b.dataset.g+'모둠';$('gbTitle').textContent='저장하는 중...';
       try{applyState(await api('chooseGroup',{id:S.student.id,name:S.student.nm,group:b.dataset.g}));toast(b.dataset.g+'모둠으로 정했어요.')}
-      catch(e){toast(e.message)}
+      catch(e){toast(e.message);api('getStudentState',S.student.id).then(applyState).catch(()=>{})}
     });
   }
   if(S.view==='lesson'&&S.step===3&&changed)loadPeer(true);
@@ -601,7 +687,8 @@ $('tstart').onclick=async()=>{
   const pw=$('tpw').value;
   try{ if(!(await api('checkTeacher',pw)))return $('terr').textContent='비밀번호가 맞지 않아요.'; }
   catch(e){return $('terr').textContent='연결 오류: '+e.message}
-  S.pw=pw;$('tlogin').classList.add('hide');show('teacher');
+  S.pw=pw;try{sessionStorage.setItem('hyegini_pw',pw)}catch(e){}
+  $('tlogin').classList.add('hide');show('teacher');
 };
 
 /* ================= 화면 전환 ================= */
@@ -693,11 +780,11 @@ function card(r,pick){
   const qs=pick&&r.questions&&r.questions.length?r.questions:[r.best];
   return `<div class="rcard ${r.id===S.student.id?'mine':''}" data-id="${esc(r.id)}">
     <header><span class="avatar">${esc((r.name||'?')[0])}</span><div><b>${esc(r.name)}${r.id===S.student.id?' (나)':''}</b><small>${r.group?r.group+'모둠':''}</small></div></header>
-    ${qs.map(q=>`<div class="q">${esc(q)}</div>`).join('')}
+    ${pick?qs.map(q=>`<div class="q">${esc(q)}</div>`).join(''):qBlock(r)}
     ${r.why?`<div class="why">${esc(r.why)}</div>`:''}
     <div class="acts"><button class="act like ${r.mine?'on':''}" data-like="${esc(r.id)}">♥ <b>${r.likes||0}</b></button>
       <button class="act" data-open="${esc(r.id)}">💬 댓글 <b>${(r.comments||[]).length}</b></button>
-      ${r.text?`<button class="act ghost" data-open="${esc(r.id)}">대화 보기</button>`:''}</div></div>`;
+      ${r.text?`<button class="act ghost" data-open="${esc(r.id)}">전체 대화 보기 →</button>`:''}</div></div>`;
 }
 function bindPeer(){
   $('pbBody').querySelectorAll('[data-like]').forEach(b=>b.onclick=async e=>{e.stopPropagation();
@@ -713,6 +800,29 @@ function bindPeer(){
 }
 
 /* ---- 카드뉴스(캔바) ---- */
+const big=(u,w)=>String(u||'').replace(/sz=w\d+/,'sz=w'+w);
+function tile(w){
+  return /pdf/i.test(w.mime)
+    ?`<a class="pdfbox" href="${esc(w.url)}" target="_blank" rel="noopener"><span class="pdf">PDF</span></a>`
+    :`<button class="wimg" data-lb="${esc(w.fileId)}"><img src="${esc(big(w.thumb,900))}" alt="${esc(w.fileName)}" loading="lazy"></button>`;
+}
+let LB={list:[],i:0};
+function bindLB(root,list){
+  const imgs=list.filter(w=>!/pdf/i.test(w.mime));
+  root.querySelectorAll('[data-lb]').forEach(b=>b.onclick=()=>{LB={list:imgs,i:Math.max(0,imgs.findIndex(w=>w.fileId===b.dataset.lb))};paintLB();$('lb').classList.remove('hide')});
+}
+function paintLB(){
+  const w=LB.list[LB.i];if(!w)return;
+  $('lbImg').src=big(w.thumb,2000);
+  $('lbCap').innerHTML=`${esc(w.group?w.group+'모둠':'')} ${esc(w.fileName)}<small>${esc(w.name)} · ${LB.i+1} / ${LB.list.length}</small>`;
+  $('lbP').style.display=$('lbN').style.display=LB.list.length>1?'':'none';
+}
+$('lbX').onclick=()=>$('lb').classList.add('hide');
+$('lb').onclick=e=>{if(e.target.id==='lb')$('lb').classList.add('hide')};
+$('lbP').onclick=()=>{LB.i=(LB.i-1+LB.list.length)%LB.list.length;paintLB()};
+$('lbN').onclick=()=>{LB.i=(LB.i+1)%LB.list.length;paintLB()};
+document.addEventListener('keydown',e=>{if($('lb').classList.contains('hide'))return;
+  if(e.key==='Escape')$('lb').classList.add('hide');if(e.key==='ArrowLeft')$('lbP').click();if(e.key==='ArrowRight')$('lbN').click()});
 $('upFile').addEventListener('change',async e=>{
   const files=[...e.target.files];e.target.value='';
   if(!S.student)return $('login').classList.remove('hide');
@@ -744,9 +854,10 @@ function renderWorks(){
   const gs=[...new Set(WORKS.map(w=>String(w.group||'?')))].sort((a,b)=>(+a||99)-(+b||99));
   $('works').innerHTML=gs.map(g=>`<section class="gsec ${g===String(S.student.group)?'mine':''}"><h3>${g==='?'?'모둠 미정':g+'모둠'}<span class="pill">${WORKS.filter(w=>String(w.group)===g).length}개</span></h3>
     <div class="wgrid">${WORKS.filter(w=>String(w.group)===g).map(w=>`<figure class="work">
-      <a href="${esc(w.url)}" target="_blank" rel="noopener">${/pdf/i.test(w.mime)?`<span class="pdf">PDF</span>`:`<img src="${esc(w.thumb)}" alt="${esc(w.fileName)}" loading="lazy">`}</a>
-      <figcaption>${esc(w.fileName)}<small>${esc(w.name)}</small></figcaption>
+      ${tile(w)}
+      <figcaption>${esc(w.fileName)}<a href="${esc(w.url)}" target="_blank" rel="noopener">원본</a><small>${esc(w.name)}</small></figcaption>
       ${w.id===S.student.id?`<button class="del" data-del="${esc(w.fileId)}" title="지우기">✕</button>`:''}</figure>`).join('')}</div></section>`).join('');
+  bindLB($('works'),WORKS);
   $('works').querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{
     try{WORKS=await api('deleteWork',{id:S.student.id,fileId:b.dataset.del});renderWorks();toast('지웠어요.')}catch(e){toast(e.message)}});
 }
@@ -796,20 +907,38 @@ $('cvSave').onclick=async()=>{
   try{await api('setCanva',S.pw,map);SET.canva=map;$('cvModal').classList.add('hide');toast('캔바 링크를 저장했어요.')}
   catch(e){toast('저장하지 못했어요: '+e.message)}
 };
-$('cvGal').onclick=async()=>{
-  $('galModal').classList.remove('hide');
-  $('galBody').innerHTML='<div class="loading"><span class="dots"><span></span><span></span><span></span></span>불러오는 중</div>';
-  try{
-    const ws=await api('getWorks',{id:(S.cls==='all'?(S.board[0]||{id:'3100'}).id:S.cls+'00'),all:true});
-    if(!ws.length)return $('galBody').innerHTML='<div class="empty">아직 올라온 카드뉴스가 없어요.</div>';
-    const gs=[...new Set(ws.map(w=>String(w.group||'?')))].sort((a,b)=>(+a||99)-(+b||99));
-    $('galBody').innerHTML=gs.map(g=>`<section class="gsec"><h3>${g==='?'?'모둠 미정':g+'모둠'}<span class="pill">${ws.filter(w=>String(w.group)===g).length}개</span></h3>
-      <div class="wgrid">${ws.filter(w=>String(w.group)===g).map(w=>`<figure class="work"><a href="${esc(w.url)}" target="_blank" rel="noopener">${/pdf/i.test(w.mime)?'<span class="pdf">PDF</span>':`<img src="${esc(w.thumb)}" alt="" loading="lazy">`}</a>
-        <figcaption>${esc(w.fileName)}<small>${esc(w.name)}</small></figcaption></figure>`).join('')}</div></section>`).join('');
-  }catch(e){$('galBody').innerHTML=`<div class="empty">불러오지 못했어요: ${esc(e.message)}</div>`}
-};
-$('galClose').onclick=()=>$('galModal').classList.add('hide');
-$('galModal').onclick=e=>{if(e.target.id==='galModal')$('galModal').classList.add('hide')};
+/* 보기 탭: 질문 게시판 / 카드뉴스 게시판 */
+S.tview='q';
+document.querySelectorAll('.vtabs button').forEach(b=>b.onclick=()=>{S.tview=b.dataset.v;paintVtabs()});
+function paintVtabs(){
+  document.querySelectorAll('.vtabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===S.tview));
+  $('qPane').style.display=S.tview==='q'?'':'none';$('wPane').style.display=S.tview==='w'?'':'none';
+  if(S.tview==='w')loadTWorks();
+}
+$('twReload').onclick=()=>loadTWorks();
+let TWORKS=[];
+async function loadTWorks(){
+  $('twBody').innerHTML='<div class="loading"><span class="dots"><span></span><span></span><span></span></span>불러오는 중</div>';
+  try{TWORKS=await api('getWorks',{id:''});renderCls();renderTWorks()}
+  catch(e){$('twBody').innerHTML=`<div class="empty">불러오지 못했어요: ${esc(e.message)}</div>`}
+}
+function renderTWorks(){
+  const ws=TWORKS.filter(inCls);
+  $('twStatus').innerHTML=`${S.cls==='all'?'전체 반':S.cls[0]+'학년 '+S.cls[1]+'반'} 카드뉴스 <b>${ws.length}개</b>`;
+  if(!ws.length){$('twBody').innerHTML='<div class="empty">아직 올라온 카드뉴스가 없어요.</div>';return}
+  const key=w=>(S.cls==='all'?clsOf(w.id)[1]+'반 ':'')+(w.group?w.group+'모둠':'모둠 미정');
+  const keys=[...new Set(ws.map(key))].sort((a,b)=>a.localeCompare(b,'ko',{numeric:true}));
+  $('twBody').innerHTML=keys.map(k=>{const list=ws.filter(w=>key(w)===k);
+    return `<section class="gsec"><h3>${esc(k)}<span class="pill">${list.length}개</span></h3><div class="wgrid">${list.map(w=>`<figure class="work">
+      ${tile(w)}
+      <figcaption>${esc(w.fileName)}<a href="${esc(w.url)}" target="_blank" rel="noopener">원본</a><small>${esc(w.name)} (${esc(w.id)}) ${esc(w.time||'')}</small></figcaption>
+      <button class="del t" data-del="${esc(w.fileId)}" title="삭제">✕</button></figure>`).join('')}</div></section>`}).join('');
+  bindLB($('twBody'),ws);
+  $('twBody').querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{
+    const w=TWORKS.find(x=>x.fileId===b.dataset.del);
+    if(!confirm(`${w?w.name+' 학생이 올린 ':''}"${w?w.fileName:''}" 파일을 삭제할까요?\n드라이브 휴지통으로 이동해요.`))return;
+    try{TWORKS=await api('deleteWork',{fileId:b.dataset.del,pw:S.pw,id:''});renderTWorks();toast('삭제했어요.')}catch(e){toast(e.message)}});
+}
 
 /* 공개하기 */
 S.shared={title:'',items:{}};
@@ -843,7 +972,7 @@ $('gcount').onchange=async e=>{const prev=SET.gcount;SET.gcount=+e.target.value;
 let ROSTER=[],gmCls='';
 $('gmOpen').onclick=async()=>{
   $('gmModal').classList.remove('hide');$('gmCols').innerHTML='<div class="loading"><span class="dots"><span></span><span></span><span></span></span>불러오는 중</div>';
-  try{ROSTER=await api('getGroups',S.pw);const cls=[...new Set(ROSTER.map(r=>clsOf(r.id)))].sort();if(!cls.includes(gmCls))gmCls=cls[0]||'';renderGM()}
+  try{ROSTER=await api('getGroups',S.pw);const cls=[...new Set(ROSTER.map(r=>clsOf(r.id)))].sort();if(S.cls!=='all'&&cls.includes(S.cls))gmCls=S.cls;else if(!cls.includes(gmCls))gmCls=cls[0]||'';renderGM()}
   catch(e){$('gmCols').innerHTML=`<div class="empty">불러오지 못했어요: ${esc(e.message)}</div>`}
 };
 $('gmClose').onclick=()=>$('gmModal').classList.add('hide');
@@ -878,19 +1007,23 @@ async function loadBoard(){
   try{SET=await api('getSettings');paintSeg();paintGemMsg();paintGem(SET.gemUrl);$('gcount').value=SET.gcount}
   catch(e){$('results').innerHTML=`<div class="empty">설정을 불러오지 못했어요: ${esc(e.message)}</div>`;return}
   try{
-    const [board,shared]=await Promise.all([api('getBoard',S.pw),api('getShared',S.pw)]);
-    S.board=board;S.shared=shared;paintShare();renderCls();
+    const [board,shared,roster]=await Promise.all([api('getBoard',S.pw),api('getShared',S.pw),api('getGroups',S.pw)]);
+    S.board=board;S.shared=shared;S.roster=roster;paintShare();renderCls();
     $('tvCount').textContent=`${LESSON} 수업에 제출한 학생 ${S.board.length}명`;
     S.last?renderResults(S.last):renderAll();
-  }catch(e){$('results').innerHTML=`<div class="empty">제출물을 불러오지 못했어요: ${esc(e.message)}<br>Apps Script에서 setup을 실행했는지 확인해 주세요.</div>`}
+  }catch(e){
+    if(/비밀번호/.test(e.message)){try{sessionStorage.removeItem('hyegini_pw')}catch(_){}S.pw=null;show('home');openTeacherLogin();return}
+    $('results').innerHTML=`<div class="empty">제출물을 불러오지 못했어요: ${esc(e.message)}<br>Apps Script에서 setup을 실행했는지 확인해 주세요.</div>`}
 }
 const clsOf=id=>String(id).slice(0,2);
 const inCls=r=>S.cls==='all'||clsOf(r.id)===S.cls;
+S.cls=store.get('hyegini_tcls')||'all';
 function renderCls(){
-  const cls=[...new Set(S.board.map(r=>clsOf(r.id)))].sort();
-  if(cls.length<2&&S.cls==='all'){$('clsbar').innerHTML='';return}
-  $('clsbar').innerHTML=['all',...cls].map(c=>`<button data-c="${c}" class="${S.cls===c?'on':''}">${c==='all'?'전체 반':c[0]+'학년 '+c[1]+'반'}</button>`).join('');
-  $('clsbar').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.cls=b.dataset.c;renderCls();rerender()});
+  const ids=[].concat(S.board.map(r=>r.id),(S.roster||[]).map(r=>r.id),TWORKS.map(w=>w.id));
+  const cls=[...new Set(ids.map(clsOf).filter(c=>/^\d\d$/.test(c)))].sort();
+  if(S.cls!=='all'&&!cls.includes(S.cls))cls.push(S.cls),cls.sort();
+  $('clsbar').innerHTML='<span class="lbl">반</span>'+['all',...cls].map(c=>`<button data-c="${c}" class="${S.cls===c?'on':''}">${c==='all'?'전체':c[0]+'학년 '+c[1]+'반'}</button>`).join('');
+  $('clsbar').querySelectorAll('button').forEach(b=>b.onclick=()=>{S.cls=b.dataset.c;store.set('hyegini_tcls',S.cls);renderCls();rerender();if(S.tview==='w')renderTWorks()});
 }
 function rerender(){S.last?renderResults(S.last):renderAll()}
 function who(r){
@@ -912,10 +1045,10 @@ function renderAll(){
   S.last=null;$('showAll').classList.add('on');
   const items=S.board.filter(inCls);
   if(!items.length){$('tvStatus').textContent='';$('results').innerHTML='<div class="empty">아직 제출한 학생이 없어요.</div>';return}
-  $('tvStatus').innerHTML=`모든 학생의 <b>가장 깊은 질문</b>`;
+  $('tvStatus').innerHTML=`학생 <b>${items.length}명</b>의 질문 (카드를 누르면 전체 대화)`;
   $('publish').style.display='none';
   $('results').innerHTML=layout(items,r=>`<div class="rcard ${isShared(r.id)?'shared':''}" tabindex="0" data-id="${esc(r.id)}" data-q='${esc(JSON.stringify([r.best]))}'>${head(r)}
-    <div class="q">${esc(r.best)}</div>${r.why?`<div class="why">${esc(r.why)}</div>`:''}</div>`);
+    ${qBlock(r,4)}${r.why?`<div class="why">${esc(r.why)}</div>`:''}</div>`);
   bindCards();
 }
 async function search(){
@@ -952,13 +1085,14 @@ function bindCards(){
 function openFull(r,w,tokens,canComment){
   CUR={r:r,w:w,canComment:!!canComment};
   $('fAv').textContent=w.init;$('fName').textContent=w.name+(w.sub?' ('+w.sub+')':'')+(r.group&&!w.sub?', '+r.group+'모둠':'');$('fTime').textContent=r.time||'';
-  $('fBest').innerHTML=`<b>가장 깊은 질문</b><br>${esc(r.best)}${r.why?`<br><span style="color:var(--sub);font-size:14px">${esc(r.why)}</span>`:''}`;
+  $('fBest').innerHTML=`<b>가장 깊은 질문</b><div class="bq">${esc(r.best)}</div>${r.why?`<div class="bw">${esc(r.why)}</div>`:''}`;
   const fmt=t=>(tokens&&tokens.length)?hl(t,tokens):esc(t);
   const turns=splitTurns(r.text||'');
   $('fText').innerHTML=turns?turns.map(t=>`<div class="turn ${t.who}"><span class="who">${t.who==='me'?esc(w.name):'Hyegini'}</span><div class="tx">${fmt(t.t.trim())}</div></div>`).join(''):fmt(r.text||'');
   $('fText').style.display=r.text?'':'none';
   renderCmts();
   $('fCmtInput').style.display=canComment?'':'none';
+  $('fDel').style.display=S.view==='teacher'&&S.pw?'':'none';
   $('fullModal').classList.remove('hide');
 }
 function renderCmts(){
@@ -988,6 +1122,16 @@ $('cmtSend').onclick=async()=>{
   $('cmtSend').disabled=false;
 };
 $('cmtText').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing)$('cmtSend').click()});
+$('fDel').onclick=async()=>{
+  if(!CUR||!S.pw)return;
+  if(!confirm(`${CUR.r.name} 학생의 제출물을 삭제할까요?
+달린 댓글과 공감도 함께 지워져요.`))return;
+  try{await api('deleteChat',S.pw,CUR.r.id,LESSON);
+    S.board=S.board.filter(b=>b.id!==CUR.r.id);$('fullModal').classList.add('hide');
+    $('tvCount').textContent=`${LESSON} 수업에 제출한 학생 ${S.board.length}명`;
+    if(S.last){S.last.results=S.last.results.filter(x=>x.id!==CUR.r.id)}rerender();toast('삭제했어요.')}
+  catch(e){toast('삭제하지 못했어요: '+e.message)}
+};
 $('fClose').onclick=()=>$('fullModal').classList.add('hide');
 $('fullModal').onclick=e=>{if(e.target.id==='fullModal')$('fullModal').classList.add('hide')};
 
@@ -1011,6 +1155,28 @@ function splitTurns(text){
     else if(cur)cur.t+='\n'+line;
   });
   return turns.some(t=>t.who==='me')?turns:null;
+}
+/* 학생이 한 질문 목록 뽑기 ([나] 표시 기준, 없으면 물음표 문장) */
+function myQuestions(r){
+  if(Array.isArray(r.myQs))return r.myQs;
+  const turns=splitTurns(r.text||'');
+  let out=[];
+  if(turns){
+    turns.filter(t=>t.who==='me').forEach(t=>{
+      const parts=t.t.split(/(?<=[?？])\s+|\n+/).map(x=>x.trim()).filter(Boolean);
+      const qs=parts.filter(x=>/[?？]$|까$|나요$|니$/.test(x));
+      out=out.concat(qs.length?qs:[t.t.trim().replace(/\s+/g,' ')]);
+    });
+  }else{
+    out=String(r.text||'').split(/\n+/).map(x=>x.trim()).filter(x=>/[?？]$/.test(x)&&x.length<=120);
+  }
+  const best=String(r.best||'').trim();
+  return [...new Set(out)].filter(x=>x&&x!==best).map(x=>x.length>140?x.slice(0,138)+'…':x);
+}
+function qBlock(r,max){
+  const qs=myQuestions(r);max=max||5;
+  return `<div class="bestq"><span>★ 가장 깊은 질문</span><p>${esc(r.best)}</p></div>`+
+    (qs.length?`<ul class="qlist"><li class="qh" style="padding-left:0;border:0">대화 중 한 질문 ${qs.length+1}개</li>${qs.slice(0,max).map(q=>`<li>${esc(q)}</li>`).join('')}${qs.length>max?`<li class="more-q" style="border:0">+ ${qs.length-max}개 더 (눌러서 전체 보기)</li>`:''}</ul>`:'');
 }
 function kwSearch(rows,q){
   const tk=tokenize(q);if(!tk.length)return{mode:'keyword',tokens:[],results:[]};
@@ -1065,7 +1231,8 @@ const DEMO={
   addComment:d=>{(CMTS[d.target]=CMTS[d.target]||[]).push({key:'c'+(++cmtN),id:d.id,name:d.name,text:d.text,time:new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'})});return CMTS[d.target]},
   deleteComment:d=>{Object.keys(CMTS).forEach(k=>CMTS[k]=CMTS[k].filter(c=>c.key!==d.key));return CMTS[CUR&&CUR.r?CUR.r.id:'']||[]},
   getWorks:()=>WORKS_DEMO.map(w=>({...w})),
-  uploadWork:d=>{WORKS_DEMO.push({fileId:'f'+WORKS_DEMO.length,group:d.group,id:d.id,name:d.name,fileName:d.fileName,mime:d.mimeType,url:'#',thumb:'',time:''});return WORKS_DEMO.map(w=>({...w}))},
+  deleteChat:(pw,id)=>{const i=SAMPLE.findIndex(x=>x.id===id);if(i>=0)SAMPLE.splice(i,1);delete LIKES[id];delete CMTS[id];return true},
+  uploadWork:d=>{WORKS_DEMO.push({fileId:'f'+WORKS_DEMO.length,group:d.group,id:d.id,name:d.name,fileName:d.fileName,mime:d.mimeType,url:'#',thumb:'data:'+d.mimeType+';base64,'+d.data,time:''});return WORKS_DEMO.map(w=>({...w}))},
   deleteWork:d=>{WORKS_DEMO=WORKS_DEMO.filter(w=>w.fileId!==d.fileId);return WORKS_DEMO.map(w=>({...w}))},
   getShared:()=>JSON.parse(JSON.stringify(SHARED_DEMO)),
   toggleShare:(pw,id,qs)=>{SHARED_DEMO.items[id]?delete SHARED_DEMO.items[id]:SHARED_DEMO.items[id]=qs;return JSON.parse(JSON.stringify(SHARED_DEMO))},
@@ -1086,9 +1253,14 @@ const DEMO={
 };
 
 /* ================= 시작 ================= */
-renderNav();renderCards();paintGem('');refreshGem();
-if(GAS&&!GAS_URL){google.script.url.getLocation(loc=>{if(loc.parameter&&loc.parameter.mode==='teacher')openTeacherLogin()})}
-else if(location.search.includes('mode=teacher'))openTeacherLogin();
+renderNav();renderCards();paintGem('');paintPick();
+try{S.pw=sessionStorage.getItem('hyegini_pw')||null}catch(e){}
+const savedMe=store.get('hyegini_me');
+if(savedMe&&savedMe.id&&savedMe.nm)login(savedMe,false);
+refreshGem();
+function teacherEntry(){if(S.pw){$('login').classList.add('hide');show('teacher')}else openTeacherLogin()}
+if(GAS&&!GAS_URL){google.script.url.getLocation(loc=>{if(loc.parameter&&loc.parameter.mode==='teacher')teacherEntry()})}
+else if(location.search.includes('mode=teacher'))teacherEntry();
 </script>
 </body>
 </html>
