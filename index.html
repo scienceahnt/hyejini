@@ -875,12 +875,14 @@ document.querySelectorAll('.seg').forEach(seg=>seg.querySelectorAll('button').fo
 
 async function loadBoard(){
   $('results').innerHTML='<div class="loading"><span class="dots"><span></span><span></span><span></span></span>불러오는 중</div>';
+  try{SET=await api('getSettings');paintSeg();paintGemMsg();paintGem(SET.gemUrl);$('gcount').value=SET.gcount}
+  catch(e){$('results').innerHTML=`<div class="empty">설정을 불러오지 못했어요: ${esc(e.message)}</div>`;return}
   try{
-    const [board,set,shared]=await Promise.all([api('getBoard',S.pw),api('getSettings'),api('getShared',S.pw)]);
-    S.board=board;SET=set;S.shared=shared;paintSeg();paintGemMsg();paintGem(SET.gemUrl);paintShare();$('gcount').value=SET.gcount;renderCls();
+    const [board,shared]=await Promise.all([api('getBoard',S.pw),api('getShared',S.pw)]);
+    S.board=board;S.shared=shared;paintShare();renderCls();
     $('tvCount').textContent=`${LESSON} 수업에 제출한 학생 ${S.board.length}명`;
     S.last?renderResults(S.last):renderAll();
-  }catch(e){$('results').innerHTML=`<div class="empty">불러오지 못했어요: ${esc(e.message)}</div>`}
+  }catch(e){$('results').innerHTML=`<div class="empty">제출물을 불러오지 못했어요: ${esc(e.message)}<br>Apps Script에서 setup을 실행했는지 확인해 주세요.</div>`}
 }
 const clsOf=id=>String(id).slice(0,2);
 const inCls=r=>S.cls==='all'||clsOf(r.id)===S.cls;
